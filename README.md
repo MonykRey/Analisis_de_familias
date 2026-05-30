@@ -7,4 +7,4 @@ Genética y Genómica Humana.
 
 Equipo1/
 ├── codigo/
-│   └── /
+│   └── Analisis_de_familias.Rmd/
