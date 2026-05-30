@@ -102,7 +102,6 @@ model_denovo <- variantes_filt %>%
     `Father:ZYG`  %in% c("Father:na",  "Father:ref")
     # El padre no la tiene
   )
-print(model_denovo)
 ```
 
 
@@ -119,12 +118,11 @@ model_x <- variantes_filt %>%
     `Father:ZYG`  %in% c("Father:na", "Father:ref"),
     `UASib:ZYG`   != "UASib:hom"
   )
-print(model_x)
 ```
 
 ### Resumen de los resultados
 
-```{r}
+```{r, echo=TRUE, results='hide'}
 cat("Numero de variantes raw:               ", nrow(datos),          "\n")
 cat("Numero de variantes tras el filtro calidad/frecuencia: ", nrow(variantes_filt), "\n")
 cat(" Numero de variantes autosómicas recesivas:            ", nrow(model_res),      "\n")
