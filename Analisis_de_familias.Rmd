@@ -1,0 +1,136 @@
+---
+title: " Análisis de variantes raras - Genética y Genómica humana: familia 8"
+date: "2026-06-01"
+author: "Mónica Reyes Ramírez"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    toc_depth: 3
+    theme: flatly
+    highlight: tango
+---
+
+## Objetivo
+
+El objetivo del siguiente código es filtrar e identificar variantes genéticas raras que pueden estar relacionadas con el fenotipo observado en el análisis de familias de la materia Genética y Genómica humana. Específicamente este código está centrado en el análisis de la familia 8.
+
+
+## Código 
+
+### Carga de datos 
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, message=FALSE, warning=FALSE)
+```
+
+```{r}
+# Cargar librerias 
+library(readxl)
+library(dplyr)
+datos <- read_excel("FAM8.xlsx")
+
+```
+
+
+### Filtrado de variantes
+
+
+```{r}
+
+#Basicamente el objetivo de esta parte de tomar el data set, crear una #copia, tomar las frecuencias de algunas celdas (frecuencias de TGP, ESP #y EVE) y reemplazar los na por NA y conviertirlas a numeros.
+
+variantes_filt <- datos %>%
+  mutate(
+    TGP_FREQ    = as.numeric(na_if(as.character(TGP_FREQ),    "na")), 
+  # TGP -> thousand genome proyect frecuency 
+    ESP_FREQ    = as.numeric(na_if(as.character(ESP_FREQ),    "na")),
+  # Exome Sequencing Proyect frecuency (base de datos poblacional)
+    EVE_ALT_FREQ = as.numeric(na_if(as.character(EVE_ALT_FREQ), "na"))
+  #Evolutionary model of variant effect (EVE) frecuency 
+  ) %>%
+
+# Esta parte es la más importante por que es el filtrado de las variantes
+  filter(
+    FILTER == "PASS", #variantes que pasaron el filtro (columna filter)
+    GQ    >= 30, # calidad del genotipo (grado de confianza asignado a una muestra)
+    RATIO >= 0.20, # al menos 20% de las lecturas son del alelo alternativo (balance alelico)
+    TR    >= 10, # minimo 10 lecturas que cubran esa posicion
+    (TGP_FREQ    <= 0.01 ), #frecuencia del 1% 
+    (ESP_FREQ    <= 0.01 ),
+    (EVE_ALT_FREQ <= 0.01 ),
+    ANNOTATION != "synonymous SNV" #excluir las sinonimas por que no esas no tienen un efecto en el gen 
+  )
+```
+
+
+### Modelos de segregación
+
+Luego de análizar el pedigrí, se pueden descartar los modelos de herencia dominante (tanto autosómico como ligado al X) y se evalúan los siguientes tres modelos de herencia compatibles con el pedigrí.
+
+### Autosómico recesivo 
+
+Hipótesis: el probando es homocigoto, ambos padres son heterocigotos y la herman@ no es homocigota (por que no esta afectad@).
+
+
+```{r}
+model_res <- variantes_filt %>%
+  filter(
+    `Proband:ZYG` == "Proband:hom",
+    # El probandpo tiene dos copias
+    `Mother:ZYG`  == "Mother:het",
+    # La madre tiene una copia
+    `Father:ZYG`  == "Father:het",
+    # El padre tiene una copia
+    `UASib:ZYG`   != "UASib:hom"
+    # L@ herman@ no tiene las dos copias
+  )
+print(model_res)
+```
+
+
+### De novo
+
+Hipótesis: la variante aparece de novo en el probando y no esta presente en ninguno de los padres.
+
+```{r}
+model_denovo <- variantes_filt %>%
+  filter(
+    `Proband:ZYG` %in% c("Proband:het", "Proband:hom"),
+    # El probando la tiene
+    `Mother:ZYG`  %in% c("Mother:na",  "Mother:ref"),
+    # La madre no la tiene
+    `Father:ZYG`  %in% c("Father:na",  "Father:ref")
+    # El padre no la tiene
+  )
+print(model_denovo)
+```
+
+
+### Lígado al X recesivo
+
+Hipótesis: El probando es hemicigoto, la madre es portadora heterocigota y el padre no tiene el alelo de referencia.
+
+```{r}
+model_x <- variantes_filt %>%
+  filter(
+    `#CHR`        == "X",
+    `Proband:ZYG` == "Proband:hom",
+    `Mother:ZYG`  == "Mother:het",
+    `Father:ZYG`  %in% c("Father:na", "Father:ref"),
+    `UASib:ZYG`   != "UASib:hom"
+  )
+print(model_x)
+```
+
+### Resumen de los resultados
+
+```{r}
+cat("Numero de variantes raw:               ", nrow(datos),          "\n")
+cat("Numero de variantes tras el filtro calidad/frecuencia: ", nrow(variantes_filt), "\n")
+cat(" Numero de variantes autosómicas recesivas:            ", nrow(model_res),      "\n")
+cat(" Numero de variantes de novo:                        ", nrow(model_denovo),   "\n")
+cat("Numero de variantes ligada al X:                    ", nrow(model_x),        "\n")
+```
+
+
