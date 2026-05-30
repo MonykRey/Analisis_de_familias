@@ -85,7 +85,6 @@ model_res <- variantes_filt %>%
     `UASib:ZYG`   != "UASib:hom"
     # L@ herman@ no tiene las dos copias
   )
-print(model_res)
 ```
 
 
