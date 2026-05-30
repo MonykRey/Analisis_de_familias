@@ -1640,46 +1640,42 @@ y la herman@ no es homocigota (por que no esta afectad@).</p>
 <span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>    <span class="co"># El padre tiene una copia</span></span>
 <span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>    <span class="st">`</span><span class="at">UASib:ZYG</span><span class="st">`</span>   <span class="sc">!=</span> <span class="st">&quot;UASib:hom&quot;</span></span>
 <span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>    <span class="co"># L@ herman@ no tiene las dos copias</span></span>
-<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>  )</span>
-<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="fu">print</span>(model_res)</span></code></pre></div>
-<pre><code>## # A tibble: 1 × 51
-##   `#CHR`    START     END REF   ALT   ZYG   FILTER  QUAL    RR    VR    TR RATIO
-##   &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 2      18745234  1.87e7 C     T     hom   PASS   3285.     0    88    88     1
-## # ℹ 39 more variables: GQ &lt;dbl&gt;, PL &lt;chr&gt;, VCF_INFO &lt;chr&gt;, BAND &lt;chr&gt;,
-## #   SNP17NF &lt;chr&gt;, ANNOTATION &lt;chr&gt;, GENE &lt;chr&gt;, GENE_NAME &lt;chr&gt;,
-## #   ACCESSION &lt;chr&gt;, EXON &lt;chr&gt;, NT_CHANGE &lt;chr&gt;, AA_CHANGE &lt;chr&gt;,
-## #   ALL_TRX &lt;chr&gt;, TGP_FREQ &lt;dbl&gt;, ESP_FREQ &lt;dbl&gt;, GRANTHAM_SC &lt;chr&gt;,
-## #   PHASTCONS &lt;chr&gt;, GERP_ESP &lt;chr&gt;, GERP &lt;chr&gt;, PHYLOP_SC &lt;chr&gt;,
-## #   PHYLOP_PRED &lt;chr&gt;, LRT_SCORE &lt;chr&gt;, LRT_PRED &lt;chr&gt;, SIFT_SCORE &lt;chr&gt;,
-## #   SIFT_PRED &lt;chr&gt;, PPH2_SCORE &lt;chr&gt;, PPH2_PRED &lt;chr&gt;, MTT_SCORE &lt;chr&gt;, …</code></pre>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>  )</span></code></pre></div>
 </div>
 <div id="de-novo" class="section level3">
 <h3>De novo</h3>
 <p>Hipótesis: la variante aparece de novo en el probando y no esta
 presente en ninguno de los padres.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>model_denovo <span class="ot">&lt;-</span> variantes_filt <span class="sc">%&gt;%</span></span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>    <span class="st">`</span><span class="at">Proband:ZYG</span><span class="st">`</span> <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Proband:het&quot;</span>, <span class="st">&quot;Proband:hom&quot;</span>),</span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    <span class="co"># El probando la tiene</span></span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    <span class="st">`</span><span class="at">Mother:ZYG</span><span class="st">`</span>  <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Mother:na&quot;</span>,  <span class="st">&quot;Mother:ref&quot;</span>),</span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>    <span class="co"># La madre no la tiene</span></span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>    <span class="st">`</span><span class="at">Father:ZYG</span><span class="st">`</span>  <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Father:na&quot;</span>,  <span class="st">&quot;Father:ref&quot;</span>)</span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>    <span class="co"># El padre no la tiene</span></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>model_denovo <span class="ot">&lt;-</span> variantes_filt <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>    <span class="st">`</span><span class="at">Proband:ZYG</span><span class="st">`</span> <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Proband:het&quot;</span>, <span class="st">&quot;Proband:hom&quot;</span>),</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    <span class="co"># El probando la tiene</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>    <span class="st">`</span><span class="at">Mother:ZYG</span><span class="st">`</span>  <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Mother:na&quot;</span>,  <span class="st">&quot;Mother:ref&quot;</span>),</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>    <span class="co"># La madre no la tiene</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>    <span class="st">`</span><span class="at">Father:ZYG</span><span class="st">`</span>  <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Father:na&quot;</span>,  <span class="st">&quot;Father:ref&quot;</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>    <span class="co"># El padre no la tiene</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>  )</span></code></pre></div>
 </div>
 <div id="lígado-al-x-recesivo" class="section level3">
 <h3>Lígado al X recesivo</h3>
 <p>Hipótesis: El probando es hemicigoto, la madre es portadora
 heterocigota y el padre no tiene el alelo de referencia.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>model_x <span class="ot">&lt;-</span> variantes_filt <span class="sc">%&gt;%</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>    <span class="st">`</span><span class="at">#CHR</span><span class="st">`</span>        <span class="sc">==</span> <span class="st">&quot;X&quot;</span>,</span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>    <span class="st">`</span><span class="at">Proband:ZYG</span><span class="st">`</span> <span class="sc">==</span> <span class="st">&quot;Proband:hom&quot;</span>,</span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>    <span class="st">`</span><span class="at">Mother:ZYG</span><span class="st">`</span>  <span class="sc">==</span> <span class="st">&quot;Mother:het&quot;</span>,</span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>    <span class="st">`</span><span class="at">Father:ZYG</span><span class="st">`</span>  <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Father:na&quot;</span>, <span class="st">&quot;Father:ref&quot;</span>),</span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>    <span class="st">`</span><span class="at">UASib:ZYG</span><span class="st">`</span>   <span class="sc">!=</span> <span class="st">&quot;UASib:hom&quot;</span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>model_x <span class="ot">&lt;-</span> variantes_filt <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>    <span class="st">`</span><span class="at">#CHR</span><span class="st">`</span>        <span class="sc">==</span> <span class="st">&quot;X&quot;</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    <span class="st">`</span><span class="at">Proband:ZYG</span><span class="st">`</span> <span class="sc">==</span> <span class="st">&quot;Proband:hom&quot;</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    <span class="st">`</span><span class="at">Mother:ZYG</span><span class="st">`</span>  <span class="sc">==</span> <span class="st">&quot;Mother:het&quot;</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>    <span class="st">`</span><span class="at">Father:ZYG</span><span class="st">`</span>  <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;Father:na&quot;</span>, <span class="st">&quot;Father:ref&quot;</span>),</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>    <span class="st">`</span><span class="at">UASib:ZYG</span><span class="st">`</span>   <span class="sc">!=</span> <span class="st">&quot;UASib:hom&quot;</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  )</span></code></pre></div>
+</div>
+<div id="resumen-de-los-resultados" class="section level3">
+<h3>Resumen de los resultados</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Numero de variantes raw:               &quot;</span>, <span class="fu">nrow</span>(datos),          <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Numero de variantes tras el filtro calidad/frecuencia: &quot;</span>, <span class="fu">nrow</span>(variantes_filt), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot; Numero de variantes autosómicas recesivas:            &quot;</span>, <span class="fu">nrow</span>(model_res),      <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot; Numero de variantes de novo:                        &quot;</span>, <span class="fu">nrow</span>(model_denovo),   <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Numero de variantes ligada al X:                    &quot;</span>, <span class="fu">nrow</span>(model_x),        <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
 </div>
 </div>
 
