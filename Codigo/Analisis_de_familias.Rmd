@@ -52,13 +52,13 @@ variantes_filt <- datos %>%
 
 # Esta parte es la más importante por que es el filtrado de las variantes
   filter(
-    FILTER == "PASS", #variantes que pasaron el filtro (columna filter)
+    FILTER %in% c("PASS", "VQSRTrancheSNP99.90to100.00", "VQSRTrancheSNP99.00to99.90"), 
     GQ    >= 30, # calidad del genotipo (grado de confianza asignado a una muestra)
     RATIO >= 0.20, # al menos 20% de las lecturas son del alelo alternativo (balance alelico)
     TR    >= 10, # minimo 10 lecturas que cubran esa posicion
-    (TGP_FREQ    <= 0.01 ), #frecuencia del 1% 
-    (ESP_FREQ    <= 0.01 ),
-    (EVE_ALT_FREQ <= 0.01 ),
+   (TGP_FREQ    <= 0.01 | is.na(TGP_FREQ)),
+   (ESP_FREQ    <= 0.01 | is.na(ESP_FREQ)),
+   (EVE_ALT_FREQ <= 0.01 | is.na(EVE_ALT_FREQ)),,
     ANNOTATION != "synonymous SNV" #excluir las sinonimas por que no esas no tienen un efecto en el gen 
   )
 ```
