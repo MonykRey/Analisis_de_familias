@@ -1610,13 +1610,13 @@ Específicamente este código está centrado en el análisis de la familia
 <span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a></span>
 <span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="co"># Esta parte es la más importante por que es el filtrado de las variantes</span></span>
 <span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    FILTER <span class="sc">==</span> <span class="st">&quot;PASS&quot;</span>, <span class="co">#variantes que pasaron el filtro (columna filter)</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>    FILTER <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;PASS&quot;</span>, <span class="st">&quot;VQSRTrancheSNP99.90to100.00&quot;</span>, <span class="st">&quot;VQSRTrancheSNP99.00to99.90&quot;</span>), </span>
 <span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>    GQ    <span class="sc">&gt;=</span> <span class="dv">30</span>, <span class="co"># calidad del genotipo (grado de confianza asignado a una muestra)</span></span>
 <span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>    RATIO <span class="sc">&gt;=</span> <span class="fl">0.20</span>, <span class="co"># al menos 20% de las lecturas son del alelo alternativo (balance alelico)</span></span>
 <span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>    TR    <span class="sc">&gt;=</span> <span class="dv">10</span>, <span class="co"># minimo 10 lecturas que cubran esa posicion</span></span>
-<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>    (TGP_FREQ    <span class="sc">&lt;=</span> <span class="fl">0.01</span> ), <span class="co">#frecuencia del 1% </span></span>
-<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>    (ESP_FREQ    <span class="sc">&lt;=</span> <span class="fl">0.01</span> ),</span>
-<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>    (EVE_ALT_FREQ <span class="sc">&lt;=</span> <span class="fl">0.01</span> ),</span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>   (TGP_FREQ    <span class="sc">&lt;=</span> <span class="fl">0.01</span> <span class="sc">|</span> <span class="fu">is.na</span>(TGP_FREQ)),</span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>   (ESP_FREQ    <span class="sc">&lt;=</span> <span class="fl">0.01</span> <span class="sc">|</span> <span class="fu">is.na</span>(ESP_FREQ)),</span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>   (EVE_ALT_FREQ <span class="sc">&lt;=</span> <span class="fl">0.01</span> <span class="sc">|</span> <span class="fu">is.na</span>(EVE_ALT_FREQ)),,</span>
 <span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a>    ANNOTATION <span class="sc">!=</span> <span class="st">&quot;synonymous SNV&quot;</span> <span class="co">#excluir las sinonimas por que no esas no tienen un efecto en el gen </span></span>
 <span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>  )</span></code></pre></div>
 </div>
